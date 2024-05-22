@@ -1,0 +1,38 @@
+
+.container {
+    border: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+table {
+    color: #fff;
+    font-size: 14px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background-color: white;
+    color: black;
+}
+
+thead {
+    background: none;
+}
+
+th {
+    padding: 20px 15px ;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 15px;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+
+tbody tr {
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background: rgb(255, 255, 255);
+    color: black;
+}

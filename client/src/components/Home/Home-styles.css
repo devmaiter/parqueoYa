@@ -1,0 +1,17 @@
+.containerHome{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.buttonHomeLogin{
+    background-color: green;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+    width: 320px;
+    height: 85px;
+    font-weight: 900;
+}
