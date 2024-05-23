@@ -1,0 +1,124 @@
+.container {
+    position : relative;
+    width : 1100px;
+    display : flex;
+    align-items : center;
+    justify-content : center;
+    flex-wrap: wrap;
+    padding : 30px;  
+    width: 100%;
+}
+.container .card {
+    position: relative;
+    max-width: 177px;
+    height: 150px;
+    background-color: #fff;
+    margin: 30px 10px;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    transition: 0.3s ease-in-out;
+    border-radius: 15px;
+}
+.container .card:hover {
+height : 180px;    
+}
+
+
+.container .card .image {
+    position: relative;
+    width: 104px;
+    height: 126px;
+    top: -40%;
+    left: 22px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    background-color: white;
+    border-radius: 13px;
+}
+
+
+.container .card .image img {
+    max-width: 100%;
+    border-radius: 15px;
+    padding: 12px;
+}
+
+.container .card .content {
+    position: relative;
+    top: -90px;
+    color: #111;
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+}
+
+.container .card:hover .content {
+    margin-top : 30px;
+    visibility : visible;
+    opacity : 1;
+    transition-delay: 0.2s;
+    
+}
+.logoutButton {
+    position: absolute;
+    top: 17px;
+    right: 29px;
+    background-color: rgb(0, 0, 0);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 35px; /* Hace que el botón sea redondo */
+    width: 40px; /* Ajusta el tamaño del botón */
+    height: 40px;
+    color: white;
+    font-weight: 400;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.Radio{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 400;
+    text-align: center;
+}
+.logoutButton .defaultText,
+.logoutButton .hoverText {
+    position: absolute;
+    transition: none;
+}
+
+.logoutButton .defaultText {
+    position: absolute;
+    transition:none; /* Ajusta el tiempo de transición */
+    visibility: visible;
+    top: 5px;
+    right: 15px;
+}
+
+.logoutButton .hoverText {
+    position: absolute;
+    transition: none; /* Elimina la transición */
+    visibility: hidden;
+    top: 5px;
+    right: 10px;
+}
+
+.logoutButton:hover {
+    width: 130px;
+}
+
+.logoutButton:hover .defaultText {
+    visibility: hidden;
+}
+
+.logoutButton:hover .hoverText {
+    visibility: visible;
+    transition: none; 
+}

@@ -8,7 +8,7 @@ import Parqueadero from "./components/Parqueaderos/Parqueadero";
 import EntradaSalida from "./components/Entrada-salida/EntradaSalida";
 import Reporte from "./components/Reporte/Reporte";
 import RegVehiculo from "./components/Registro/RegVehiculo";
-
+import Login from "./pages/login";
 function App() {
   return (
     <Router>
@@ -19,6 +19,7 @@ function App() {
       <Route path="/EntradaSalida" render={(props) => <EntradaSalida/>} />
       <Route path="/Reporte" render={(props) => <Reporte/>} />
       <Route path="/RegVehiculo" render={(props) => <RegVehiculo/>} />
+      <Route path="/Login" render={(props) => <Login/>} />
     </Router>
   );
 }

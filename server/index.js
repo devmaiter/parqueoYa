@@ -98,6 +98,7 @@ app.post("/login", (req, res) => {
         bcrypt.compare(password, result[0].password, (error, response) => {
           if (response) {
             req.session.user = result;
+            req.session.userId = result[0].id; // Guarda el ID del usuario en la sesión
             console.log(req.session.user);
             res.send(result);
           } else {
@@ -109,6 +110,45 @@ app.post("/login", (req, res) => {
       }
     }
   );
+});
+
+
+app.post('/regVehiculo', function(request, response) {
+  // Get the vehicle details from the request body
+  let cedulaPropietario = request.body.cedulaPropietario;
+  let placa = request.body.placa;
+  let tipoVehiculo = request.body.tipoVehiculo;
+  // Get the user's id from the session
+  let vigilante_id = request.session.userId;
+  // Check that all required details are present
+  if (cedulaPropietario && placa && tipoVehiculo && vigilante_id) {
+      // Insert the new vehicle into the database
+      db.query('INSERT INTO vehiculos (cedulaPropietario, placa, tipoVehiculo, vigilante_id) VALUES (?, ?, ?, ?)', [cedulaPropietario, placa, tipoVehiculo, vigilante_id], function(error, results, fields) {
+          if (error) throw error;
+          // Check if the vehicle was registered successfully
+          if (results.affectedRows > 0) {
+              response.send('Vehiculo registrado exitosamente!');
+          } else {
+              response.send('Hubo un problema al registrar el vehiculo.');
+          }			
+          response.end();
+      });
+  } else {
+      // If any details are missing, send an error message
+      response.send('Por favor ingresa la placa, el tipo de vehiculo, la cedula y el id del vigilante!');
+      response.end();
+  }
+});
+
+app.get('/userId', function(req, res) {
+  // Check if the user is logged in
+  if (req.session.userId) {
+      // Send the user's id
+      res.send({ userId: req.session.userId });
+  } else {
+      // If the user is not logged in, send an error message
+      res.status(401).send({ message: 'No estás conectado' });
+  }
 });
 
 app.listen(3001, () => {

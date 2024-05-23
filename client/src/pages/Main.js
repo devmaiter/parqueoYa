@@ -19,20 +19,15 @@ export default function Main() {
       }
     });
   }, []);
-
-  const logout = () => {
-    Axios.get("http://localhost:3001/logout").then((response) => {
-        setRole("");
-        setUsername(""); // Clear username
-        history.push("/registration"); // Redirect to /registration after successful logout
-    });
+  const handleLogout = () => {
+    setUsername("");
+    setRole("");
   };
 
   return (
     <div>
-      {role == "vigilante" && <Vigilante />}
-      {role == "admin" && <Admin username={username} />}
-      <button onClick={logout}>Logout</button> {/* Logout button */}
+      {role == "vigilante" && <Vigilante username={username} handleLogout={handleLogout} />}
+      {role == "admin" && <Admin username={username} handleLogout={handleLogout} />}
     </div>
   );
 }

@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Registro-styles.css'
-import { useHistory } from 'react-router-dom';
+import "../../App.css";
 
 export default function RegVehiculo() {
     const [cedula, setCedula] = useState('');
     const [placa, setPlaca] = useState('');
     const [tipoVehiculo, setTipoVehiculo] = useState('');
     const [vigilante_id, setVigilanteId] = useState('');
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/userId')
+        .then(function (response) {
+            setVigilanteId(response.data.userId);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, []);
 
     const handleCedulaChange = (e) => {
         setCedula(e.target.value);
@@ -21,48 +31,54 @@ export default function RegVehiculo() {
         setTipoVehiculo(e.target.value);
     };
 
-    const handleVigilanteIdChange = (e) => {
-        setVigilanteId(e.target.value);
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        axios.post('http://localhost:3000/regVehiculo', {
+        axios.post('http://localhost:3001/regVehiculo', {
             cedulaPropietario: cedula,
             placa: placa,
             tipoVehiculo: tipoVehiculo,
             vigilante_id: vigilante_id
         })
         .then(function (response) {
-            console.log(response);
+            if (response.status === 200) {
+                alert('Vehículo registrado con éxito');
+            } else {
+                console.log(response.data);
+            }
         })
         .catch(function (error) {
-            console.log(error);
+            alert('Error al registrar el vehículo: ' + error.message);
         });
     };
 
     return (
-        <form className='containerRegister' onSubmit={handleSubmit}>
-            <h1>Seleccione Vehiculo</h1>
-            <div onChange={handleTipoVehiculoChange}>
-                <input type="radio" value="Moto" name="vehiculo" /> Moto
-                <input type="radio" value="Carro" name="vehiculo" /> Carro
+        <div className='App'>
+            <div className='login'>
+                <form className='login__form' onSubmit={handleSubmit}>
+                    <h1>Seleccione Vehiculo</h1>
+                    <div className='containerRadio' onChange={handleTipoVehiculoChange}>
+                        <input type="radio" value="Moto" name="vehiculo" /> Moto
+                        <input type="radio" value="Carro" name="vehiculo" /> Carro
+                    </div>
+                    <div className="login__box"  >
+                        <i className="ri-user-3-line login__icon"></i>
+                        <div className="login__box-input">
+                            <input className='login__input' type="text" id="placa" value={placa} onChange={handlePlacaChange} />
+                            <label  htmlFor="register-username" className="login__label">Placa</label>
+                        </div>
+                    </div>
+                    <div className="login__box"  >
+                        <i className="ri-user-3-line login__icon"></i>
+                        <div className="login__box-input">
+                            <input className='login__input' type="text" id="placa" value={cedula} onChange={handleCedulaChange} />
+                            <label  htmlFor="register-username" className="login__label">Cedula</label>
+                        </div>
+                    </div>
+
+                    <button className='login__button' type="submit">Registrar</button>
+                    
+                </form>
             </div>
-            <div className='containerForm'>
-                <label htmlFor="placa">Placa:</label>
-                <input type="text" id="placa" value={placa} onChange={handlePlacaChange} />
-            </div>
-            <div  className='containerForm' >
-                <label htmlFor="cedula">Cedula:</label>
-                <input type="text" id="cedula" value={cedula} onChange={handleCedulaChange} />
-            </div>
-            <div  className='containerForm' >
-                <label htmlFor="vigilante_id">Vigilante ID:</label>
-                <input type="text" id="vigilante_id" value={vigilante_id} onChange={handleVigilanteIdChange} />
-            </div>
-            <button type="submit">Registrar</button>
-            
-        </form>
+        </div>
     );
 }
