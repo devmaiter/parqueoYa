@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Registro-styles.css'
 import "../../App.css";
-
+import { useHistory } from 'react-router-dom';
 export default function RegVehiculo() {
     const [cedula, setCedula] = useState('');
     const [placa, setPlaca] = useState('');
     const [tipoVehiculo, setTipoVehiculo] = useState('');
     const [vigilante_id, setVigilanteId] = useState('');
-
+    const routeHistory = useHistory();
     useEffect(() => {
         axios.get('http://localhost:3001/userId')
         .then(function (response) {
@@ -31,6 +31,9 @@ export default function RegVehiculo() {
         setTipoVehiculo(e.target.value);
     };
 
+    const handleBack = () => {
+        routeHistory.goBack();
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.post('http://localhost:3001/regVehiculo', {
@@ -74,11 +77,13 @@ export default function RegVehiculo() {
                             <label  htmlFor="register-username" className="login__label">Cedula</label>
                         </div>
                     </div>
-
                     <button className='login__button' type="submit">Registrar</button>
                     
                 </form>
             </div>
+            <button className='buttonReverse' onClick={handleBack}> 
+                <img src='	https://cdn-icons-png.flaticon.com/512/13696/13696827.png'></img>
+            </button>
         </div>
     );
 }

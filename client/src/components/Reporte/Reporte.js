@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { useHistory } from 'react-router-dom';
 function Reporte() {
     const [reportData, setReportData] = useState([]);
+    const routeHistory = useHistory();
 
     useEffect(() => {
         axios.get('http://localhost:3000/vehiculos')
@@ -13,7 +14,9 @@ function Reporte() {
                 console.error('There was an error!', error);
             });
     }, []);
-
+    const handleBack = () => {
+        routeHistory.goBack();
+    };
     return (
         <div>
             <button>Generar Reporte</button>
@@ -45,6 +48,11 @@ function Reporte() {
                     ))}
                 </tbody>
             </table>
+            <button className='buttonReverse' onClick={handleBack}> 
+            
+            <img src='	https://cdn-icons-png.flaticon.com/512/13696/13696827.png'></img>
+            
+            </button>
         </div>
     );
 }

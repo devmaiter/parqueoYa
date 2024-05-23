@@ -28,6 +28,30 @@ input {
   accent-color: black;
 }
 
+.buttonReverse{
+  /* left: 239px; */
+  background: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 30px;
+  width: 150px;
+  height: 200px;
+  color: white;
+  font-weight: 900;
+  margin-right: 20px;
+  position: absolute;
+  top: -10px;
+  /* left: 239px; */
+  right: 937px;
+}
+.buttonReverse img {
+  max-width: 100%;
+  height: auto;
+  position: fixed;
+  width: 50px;
+  top: 5px;
+  left: 2px;
+}
 .containerRadio{  
   display: flex;
   justify-content: center;

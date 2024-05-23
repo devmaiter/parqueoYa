@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
+const moment = require('moment-timezone');
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -150,6 +151,67 @@ app.get('/userId', function(req, res) {
       res.status(401).send({ message: 'No estás conectado' });
   }
 });
+
+app.get('/getAllNumParqueadero', function(request, response) {
+  db.query('SELECT numParqueadero, disponibilidad FROM parqueaderos', function(error, results, fields) {
+      if (error) throw error;
+      response.send(results);
+  });
+});
+
+app.post('/updateEntrada', function(request, response) {
+  // Get the vehicle's plate from the request body
+  let placa = request.body.placa;
+
+  if (placa) {
+      // Get the current date and time in the 'America/Bogota' timezone
+      let entrada = moment().tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+
+      // Update the 'entrada' column for the specified vehicle
+      db.query('UPDATE vehiculos SET entrada = ? WHERE placa = ?', [entrada, placa], function(error, results, fields) {
+          if (error) throw error;
+          // Check if the update was successful
+          if (results.affectedRows > 0) {
+              response.send('Entrada actualizada exitosamente!');
+          } else {
+              response.send('Hubo un problema al actualizar la entrada.');
+          }			
+          response.end();
+      });
+  } else {
+      // If the vehicle's plate is missing, send an error message
+      response.send('Por favor ingresa la placa del vehiculo!');
+      response.end();
+  }
+});
+
+
+app.post('/updateSalida', function(request, response) {
+  // Get the vehicle's plate from the request body
+  let placa = request.body.placa;
+
+  if (placa) {
+      // Get the current date and time in the 'America/Bogota' timezone
+      let salida = moment().tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+
+      // Update the 'salida' column for the specified vehicle
+      db.query('UPDATE vehiculos SET salida = ? WHERE placa = ?', [salida, placa], function(error, results, fields) {
+          if (error) throw error;
+          // Check if the update was successful
+          if (results.affectedRows > 0) {
+              response.send('Salida actualizada exitosamente!');
+          } else {
+              response.send('Hubo un problema al actualizar la salida.');
+          }			
+          response.end();
+      });
+  } else {
+      // If the vehicle's plate is missing, send an error message
+      response.send('Por favor ingresa la placa del vehiculo!');
+      response.end();
+  }
+});
+
 
 app.listen(3001, () => {
   console.log("running server");
