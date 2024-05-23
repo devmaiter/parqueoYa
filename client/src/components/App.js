@@ -7,6 +7,7 @@ import RegVehiculo from './components/Registro/RegVehiculo';
 import EntradaSalida from './components/Entrada-salida/EntradaSalida';
 import Reporte from './components/Reporte/Reporte';
 import HomeLogin from './components/login/homelogin';
+import Report from './Reporte/report';
 import UserRegister from './components/login/registerComponent'
 import { RoleProvider } from './components/role';
 import './App.css'; // Import your CSS file here
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/RegVehiculo" element={<RegVehiculo/>} />
                 <Route path="/homeLogin" element={<HomeLogin/>} />
                 <Route path="/register" element={<UserRegister/>} />
+                <Route path="/report" element={<Report/>} />
             </Routes>
         </Router>
       </>

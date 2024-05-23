@@ -212,6 +212,12 @@ app.post('/updateSalida', function(request, response) {
   }
 });
 
+app.get('/vehiculos', function(request, response) {
+  db.query('SELECT * FROM vehiculos', function(error, results, fields) {
+      if (error) throw error;
+      response.send(results);
+  });
+});
 
 app.listen(3001, () => {
   console.log("running server");

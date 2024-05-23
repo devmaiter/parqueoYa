@@ -7,6 +7,7 @@ import HomeComponent from "./components/Home/HomeComponent";
 import Parqueadero from "./components/Parqueaderos/Parqueadero";
 import EntradaSalida from "./components/Entrada-salida/EntradaSalida";
 import Reporte from "./components/Reporte/Reporte";
+import Report from "./components/Reporte/report";
 import RegVehiculo from "./components/Registro/RegVehiculo";
 import Login from "./pages/login";
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Route path="/Reporte" render={(props) => <Reporte/>} />
       <Route path="/RegVehiculo" render={(props) => <RegVehiculo/>} />
       <Route path="/Login" render={(props) => <Login/>} />
+      <Route path="/report" render={(props) => <Report/>} />
     </Router>
   );
 }

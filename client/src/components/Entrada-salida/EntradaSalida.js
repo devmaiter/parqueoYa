@@ -54,17 +54,6 @@ export default function EntradaSalida() {
     return (
         <div className='App'>
             <div className='login'>    
-                <form className='login__form' onSubmit={handleSalidaSubmit}>
-                    <h1>Actualizar Salida</h1>
-                    <div className="login__box"  >
-                        <i className="ri-user-3-line login__icon"></i>
-                        <div className="login__box-input">
-                            <input className='login__input' type="text" id="placa" value={placaSalida} onChange={handlePlacaChangeSalida} />
-                            <label  htmlFor="register-username" className="login__label">Placa</label>
-                        </div>
-                    </div>
-                    <button className='login__button' type="submit">Guardar</button>
-                </form>
                 <form className='login__form' onSubmit={handleEntradaSubmit}>
                     <h1>Actualizar Entrada</h1>
                     <div className="login__box"  >
@@ -76,8 +65,19 @@ export default function EntradaSalida() {
                     </div>
                     <button className='login__button' type="submit">Guardar</button>
                 </form>
-                {messageSalida && <p>{messageSalida}</p>}
                 {messageEntrada && <p>{messageEntrada}</p>}
+                <form className='login__form' onSubmit={handleSalidaSubmit}>
+                    <h1>Actualizar Salida</h1>
+                    <div className="login__box"  >
+                        <i className="ri-user-3-line login__icon"></i>
+                        <div className="login__box-input">
+                            <input className='login__input' type="text" id="placa" value={placaSalida} onChange={handlePlacaChangeSalida} />
+                            <label  htmlFor="register-username" className="login__label">Placa</label>
+                        </div>
+                    </div>
+                    <button className='login__button' type="submit">Guardar</button>
+                </form>
+                {messageSalida && <p>{messageSalida}</p>}
                 <button className='buttonReverse' onClick={handleBack}> 
                     <img src='https://cdn-icons-png.flaticon.com/512/13696/13696827.png'></img>
                 </button>

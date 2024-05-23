@@ -243,6 +243,17 @@ img {
   color: white;
   margin-top: 20px;
 }
+.report__button {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--white-color);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  margin-bottom: 2rem;
+  color: white;
+  margin-top: 20px;
+}
 .login__button:hover {
   background-color: white;
   color: black;
