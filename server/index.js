@@ -160,60 +160,88 @@ app.get('/getAllNumParqueadero', function(request, response) {
 });
 
 app.post('/updateEntrada', function(request, response) {
-  // Get the vehicle's plate from the request body
+  // Get the vehicle's plate and parking number from the request body
   let placa = request.body.placa;
+  let numParqueadero = request.body.numParqueadero;
 
-  if (placa) {
+  if (placa && numParqueadero) {
+      // Get the current date and time in the 'America/Bogota' timezone
+      let entrada = moment().tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+
+      // Update the 'entrada' and 'numParqueadero' columns for the specified vehicle
+      db.query('UPDATE vehiculos SET entrada = ?, numParqueadero = ? WHERE placa = ?', [entrada, numParqueadero, placa], function(error, results, fields) {
+          if (error) throw error;
+          // Check if the update was successful
+          if (results.affectedRows > 0) {
+              // If the update was successful, update the parking availability
+              db.query('UPDATE parqueaderos SET disponibilidad = 0 WHERE numParqueadero = ?', [numParqueadero], function(error, results, fields) {
+                  if (error) throw error;
+                  // Check if the update was successful
+                  if (results.affectedRows > 0) {
+                      response.json({ message: 'Entrada, parqueadero y disponibilidad de parqueadero actualizadas exitosamente!' });
+                  } else {
+                      response.json({ message: 'Hubo un problema al actualizar la disponibilidad del parqueadero.' });
+                  }
+                  response.end();
+              });
+          } else {
+              response.json({ message: 'Placa no registrada' });
+              response.end();
+          }			
+      });
+  } else {
+      // If the vehicle's plate or parking number is missing, send an error message
+      response.json({ message: 'Por favor ingresa la placa del vehiculo y el número de parqueadero!' });
+      response.end();
+  }
+});
+
+app.post('/Salida', function(request, response) {
+  // Get the vehicle's plate and parking number from the request body
+  let placa = request.body.placa;
+  let numParqueadero = request.body.numParqueadero;
+
+  if (placa && numParqueadero) {
       // Get the current date and time in the 'America/Bogota' timezone
       let entrada = moment().tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
 
       // Update the 'entrada' column for the specified vehicle
-      db.query('UPDATE vehiculos SET entrada = ? WHERE placa = ?', [entrada, placa], function(error, results, fields) {
+      db.query('UPDATE vehiculos SET salida = ? WHERE placa = ?', [entrada, placa], function(error, results, fields) {
           if (error) throw error;
           // Check if the update was successful
           if (results.affectedRows > 0) {
-              response.send('Entrada actualizada exitosamente!');
+              // If the update was successful, update the parking availability
+              db.query('UPDATE parqueaderos SET disponibilidad = 1 WHERE numParqueadero = ?', [numParqueadero], function(error, results, fields) {
+                  if (error) throw error;
+                  // Check if the update was successful
+                  if (results.affectedRows > 0) {
+                      response.send('Entrada y disponibilidad de parqueadero actualizadas exitosamente!');
+                  } else {
+                      response.send('Hubo un problema al actualizar la disponibilidad del parqueadero.');
+                  }
+                  response.end();
+              });
           } else {
               response.send('Hubo un problema al actualizar la entrada.');
+              response.end();
           }			
-          response.end();
       });
   } else {
-      // If the vehicle's plate is missing, send an error message
-      response.send('Por favor ingresa la placa del vehiculo!');
+      // If the vehicle's plate or parking number is missing, send an error message
+      response.send('Por favor ingresa la placa del vehiculo y el número de parqueadero!');
       response.end();
   }
 });
 
-
-app.post('/updateSalida', function(request, response) {
-  // Get the vehicle's plate from the request body
-  let placa = request.body.placa;
-
-  if (placa) {
-      // Get the current date and time in the 'America/Bogota' timezone
-      let salida = moment().tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
-
-      // Update the 'salida' column for the specified vehicle
-      db.query('UPDATE vehiculos SET salida = ? WHERE placa = ?', [salida, placa], function(error, results, fields) {
-          if (error) throw error;
-          // Check if the update was successful
-          if (results.affectedRows > 0) {
-              response.send('Salida actualizada exitosamente!');
-          } else {
-              response.send('Hubo un problema al actualizar la salida.');
-          }			
-          response.end();
-      });
-  } else {
-      // If the vehicle's plate is missing, send an error message
-      response.send('Por favor ingresa la placa del vehiculo!');
-      response.end();
-  }
-});
 
 app.get('/vehiculos', function(request, response) {
   db.query('SELECT * FROM vehiculos', function(error, results, fields) {
+      if (error) throw error;
+      response.send(results);
+  });
+});
+app.get('/getAvailableParkings', function(request, response) {
+  db.query('SELECT numParqueadero FROM parqueaderos WHERE disponibilidad = 1', function(error, results, fields) {
       if (error) throw error;
       response.send(results);
   });

@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Entrada-styles.css'
 import { useHistory } from 'react-router-dom';
 import "../../App.css";
 
 export default function EntradaSalida() {
-    const [placaEntrada, setPlacaEntrada] = useState('');
-    const [placaSalida, setPlacaSalida] = useState('');
-    const [messageEntrada, setMessageEntrada] = useState('');
-    const [messageSalida, setMessageSalida] = useState('');
+    const [placaEntrada, setPlacaEntrada] = useState(localStorage.getItem('placaEntrada') || '');
     const routeHistory = useHistory();
-    
+    const [numParqueadero, setNumParqueadero] = useState(localStorage.getItem('numParqueadero') || '');
+    const [parqueaderos, setParqueaderos] = useState([]);
+
+    useEffect(() => {
+        fetchParqueaderos();
+    }, []);
+
+    const fetchParqueaderos = () => {
+        axios.get('http://localhost:3001/getAvailableParkings')
+        .then(function (response) {
+            setParqueaderos(response.data);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    };
+
     const handleBack = () => {
         routeHistory.goBack();
     };
@@ -19,38 +32,45 @@ export default function EntradaSalida() {
         setPlacaEntrada(e.target.value);
     };
 
-    const handlePlacaChangeSalida = (e) => {
-        setPlacaSalida(e.target.value);
-    };
-
     const handleSalidaSubmit = (e) => {
         e.preventDefault();
-
-        axios.post('http://localhost:3001/updateSalida', {
-            placa: placaSalida
+        axios.post('http://localhost:3001/Salida', {
+            placa: placaEntrada,
+            numParqueadero: numParqueadero        
         })
         .then(function (response) {
-            setMessageSalida(response.data);
+            if (response.data.message) {
+                alert(response.data.message); // Aquí se muestra la alerta
+            } else {
+                alert('exito al actualizar la salida ');
+            }
         })
         .catch(function (error) {
-            console.log(error);
+            alert('Error al actualizar la salida porque la placa es incorrecta');
         });
     };
 
     const handleEntradaSubmit = (e) => {
         e.preventDefault();
-
+    
         axios.post('http://localhost:3001/updateEntrada', {
-            placa: placaEntrada
+            placa: placaEntrada,
+            numParqueadero: numParqueadero
         })
         .then(function (response) {
-            setMessageEntrada(response.data);
+            alert(response.data.message); // Aquí se muestra la alerta
+            localStorage.setItem('placaEntrada', placaEntrada);
+            localStorage.setItem('numParqueadero', numParqueadero);
+            setPlacaEntrada(placaEntrada);
+            setNumParqueadero(numParqueadero);
         })
         .catch(function (error) {
             console.log(error);
         });
     };
-
+    const handleParqueaderoChange = (e) => {
+        setNumParqueadero(e.target.value);
+    };
     return (
         <div className='App'>
             <div className='login'>    
@@ -63,21 +83,22 @@ export default function EntradaSalida() {
                             <label  htmlFor="register-username" className="login__label">Placa</label>
                         </div>
                     </div>
-                    <button className='login__button' type="submit">Guardar</button>
-                </form>
-                {messageEntrada && <p>{messageEntrada}</p>}
-                <form className='login__form' onSubmit={handleSalidaSubmit}>
-                    <h1>Actualizar Salida</h1>
                     <div className="login__box"  >
-                        <i className="ri-user-3-line login__icon"></i>
-                        <div className="login__box-input">
-                            <input className='login__input' type="text" id="placa" value={placaSalida} onChange={handlePlacaChangeSalida} />
-                            <label  htmlFor="register-username" className="login__label">Placa</label>
-                        </div>
+                        <select onChange={handleParqueaderoChange}>
+                            <option value="">Selecciona un parqueadero</option>
+                            {parqueaderos.map((parqueadero) => (
+                                <option key={parqueadero.numParqueadero} value={parqueadero.numParqueadero}>
+                                    {parqueadero.numParqueadero}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <button className='login__button' type="submit">Guardar</button>
                 </form>
-                {messageSalida && <p>{messageSalida}</p>}
+                <form className='login__form' onSubmit={handleSalidaSubmit}>
+                    <h1>Actualizar Salida</h1>
+                    <button className='login__button' type="submit">Guardar</button>
+                </form>
                 <button className='buttonReverse' onClick={handleBack}> 
                     <img src='https://cdn-icons-png.flaticon.com/512/13696/13696827.png'></img>
                 </button>

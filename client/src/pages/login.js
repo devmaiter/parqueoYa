@@ -22,7 +22,7 @@ export default function Login() {
         setLoginStatus(response.data.message);
       } else {
         setLoginStatus(response.data[0].username);
-        history.push("/");
+        history.push("/home"); // Redirige al usuario a la página de inicio después de un inicio de sesión exitoso
       }
     });
   };
@@ -36,7 +36,7 @@ export default function Login() {
   }, []);
 
   return (
-    < div className="App">
+    <div className="App">
         <div className="login">
             <form action="" className="login__form" onSubmit={login}>
             <h1 className="login__title">Login</h1>
